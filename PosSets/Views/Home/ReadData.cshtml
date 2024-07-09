@@ -1,0 +1,118 @@
+﻿@*@using business.Repository.Imp;
+@using business.Statics;
+@using infrastructure.Models;
+@using business.Repository.Interface;
+@model List<UserInfo>
+@{
+    Layout = "_Layout";
+
+}
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        direction: rtl;
+    }
+</style>
+<table>
+    @if (ViewBag.Error != null)
+    {
+        <h1>
+            فایل مورد نظر خطا در خط
+            {@ViewBag.Error}
+            دارد
+        </h1>
+    }
+    else
+    {
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>ردیف</th>
+                <th>تاریخ</th>
+                <th>روز</th>
+                <th>اسم</th>
+                <th>نوع</th>
+                <th>تایم کاری</th>
+                <th>اولین ورود</th>
+                <th>آخرین ورود</th>
+                <th>رکورد</th>
+                <th>رکورداصلی </th>
+            </tr>
+            <tr>
+                <td>@item.row</td>
+                @{
+                    var dates = ShamsiCalender.ToShamsi(item.DateTime);
+                }
+                <td>@dates</td>
+                <td>@item.Day</td>
+                <td>@item.Name</td>
+                @{
+                    if (item.Status.Count > 0)
+                    {
+                        var typs = TypeOfKind.GetTypeName(item.Status[0]);
+                        string types2 = "";
+                        if (!typs.Equals(type.error))
+                        {
+
+                            if (item.Status.Count > 1 && item.Status[1] != type.error && item.Status[1] != type.Normal)
+                            {
+                                types2 = TypeOfKind.GetTypeName(item.Status[1]);
+                            }
+                        }
+
+                        <td>
+                            @typs
+                            @if (types2 != "")
+                            {
+                                <p> / @types2</p>
+
+                            }
+                        </td>
+                        if (typs != "خطا")
+                        {
+                            if (typs != "مرخصی روزانه")
+                            {
+                                <td>@item.WorkTime</td>
+                            }
+                            else
+                            {
+                                <td> </td>
+                            }
+                            <td>@item.FirstArrive</td>
+                            <td>@item.LastCheckout</td>
+                            <td>
+                                @foreach (var item2 in item.Record)
+                                {
+                                    @item2
+                                    <br />
+                                }
+                            </td>
+                            <td>
+                                @foreach (var item2 in item.RealRecord)
+                                {
+                                    @item2
+                                    <br />
+                                }
+                            </td>
+                        }
+                        else
+                        {
+                            <td> </td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                        }
+                    }
+                }
+
+
+            </tr>
+        }
+
+    }
+</table>
+*@

@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "mGx+OxTfThigV3ZOiO/ZPSRtmFzmrEJOU4v0YnXGH7NOvWAeB+6VcNCTXR8STvV3DFPk6KhQOj8IrHuEP3wKag==",
+  "success": true,
+  "projectFilePath": "D:\\EndInAndOut\\PosSets\\PosSets\\PosSets.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\SHPA-N6\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.17\\microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
+    "C:\\Users\\SHPA-N6\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.1\\microsoft.extensions.primitives.5.0.1.nupkg.sha512",
+    "C:\\Users\\SHPA-N6\\.nuget\\packages\\system.io.pipelines\\5.0.2\\system.io.pipelines.5.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}

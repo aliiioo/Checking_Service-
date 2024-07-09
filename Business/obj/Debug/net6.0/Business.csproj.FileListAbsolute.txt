@@ -1,0 +1,15 @@
+D:\EndInAndOut\PosSets\Business\obj\Debug\net6.0\Business.csproj.AssemblyReference.cache
+D:\EndInAndOut\PosSets\Business\obj\Debug\net6.0\Business.GeneratedMSBuildEditorConfig.editorconfig
+D:\EndInAndOut\PosSets\Business\obj\Debug\net6.0\Business.AssemblyInfoInputs.cache
+D:\EndInAndOut\PosSets\Business\obj\Debug\net6.0\Business.AssemblyInfo.cs
+D:\EndInAndOut\PosSets\Business\obj\Debug\net6.0\Business.csproj.CoreCompileInputs.cache
+D:\EndInAndOut\PosSets\Business\bin\Debug\net6.0\Business.deps.json
+D:\EndInAndOut\PosSets\Business\bin\Debug\net6.0\Business.dll
+D:\EndInAndOut\PosSets\Business\bin\Debug\net6.0\Business.pdb
+D:\EndInAndOut\PosSets\Business\bin\Debug\net6.0\Infrastructure.dll
+D:\EndInAndOut\PosSets\Business\bin\Debug\net6.0\Infrastructure.pdb
+D:\EndInAndOut\PosSets\Business\obj\Debug\net6.0\Business.csproj.CopyComplete
+D:\EndInAndOut\PosSets\Business\obj\Debug\net6.0\Business.dll
+D:\EndInAndOut\PosSets\Business\obj\Debug\net6.0\refint\Business.dll
+D:\EndInAndOut\PosSets\Business\obj\Debug\net6.0\Business.pdb
+D:\EndInAndOut\PosSets\Business\obj\Debug\net6.0\ref\Business.dll
