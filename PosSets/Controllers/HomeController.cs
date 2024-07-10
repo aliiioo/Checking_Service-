@@ -1,5 +1,6 @@
 ﻿using Business.Repository.Interface;
 using Business.Statics;
+using Infrastructure.DTOs;
 using Infrastructure.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -38,16 +39,16 @@ namespace PosSets.Controllers
                     {
                         return RedirectToAction("ReadData");
                     }
-                    return NotFound();
+                    return BadRequest();
                 }
                 catch (Exception ex)
                 {
-                    return NotFound();
+                    return BadRequest();
                 }
             }
             else
             {
-                return NotFound();
+                return BadRequest();
             }
         }
 
@@ -67,144 +68,13 @@ namespace PosSets.Controllers
                 return View();
             }
 
-            var UserDetailsGroup = Inputs.UsersDetail.GroupBy(x => (x.Id, x.Date));
-            var CurrentDate = UserDetailsGroup.First().First().Date;
-            var UserInfos = new List<UserInfo>();
+            var UserDetails = Inputs.UsersDetail.GroupBy(x => (x.Id, x.Date));
+            var CurrentDate = UserDetails.First().First().Date;
 
-            var Absence = new Dictionary<int, string>(Inputs.UsersId);
+            var UsersInfos = _logic.SaveUserInOut(UserDetails, CurrentDate,Inputs.UsersId);
 
-            int Row = 0;
-            for (int ii = 0; ii < UserDetailsGroup.Count(); ii++)
-            {
-                var person = UserDetailsGroup.ElementAt(ii);
-                var UserInfo = new UserInfo();
-                Row++;
-                // Create UserInfo
-                if (CurrentDate == person.Key.Date)
-                {
-                    Absence.Remove(person.First().Id);
-                }
-                if (ii+1==UserDetailsGroup.Count() || ii+1< UserDetailsGroup.Count())
-                {
-                    if (ii+1 == UserDetailsGroup.Count() || CurrentDate != UserDetailsGroup.ElementAt(ii+1).Key.Date)
-                    {
-                        var AbsenceCount = Absence.Count;
+            return View(UsersInfos);
 
-                        for (int j = 0; j < AbsenceCount; j++)
-                        {
-                            UserInfo User = new UserInfo();
-                            User.Id = Absence.ElementAt(j).Key;
-                            User.Day = ShamsiDayOfWeek.GetDayShamsi(CurrentDate.Date.DayOfWeek.ToString());
-                            User.Name = Absence.ElementAt(j).Value;
-                            User.FirstArrive = LawOfTime.ZeroTime;
-                            User.LastCheckout = LawOfTime.ZeroTime;
-                            User.Record.Add("0:0");
-                            User.row = Row++;
-                            User.WorkTime = LawOfTime.ZeroTime;
-                            User.Status.Add(type.daily_leave);
-                            User.DateTime = CurrentDate.Date;
-                            UserInfos.Add(User);
-                        }
-                        Absence.Clear();
-                        Absence = new Dictionary<int, string>(Inputs.UsersId);
-                        if (ii+1!= UserDetailsGroup.Count())
-                        {
-                            CurrentDate = UserDetailsGroup.ElementAt(ii + 1).Key.Date;
-                        }
-                        // Date Have Chaneged Absence mush Write
-                    }
-                }
-
-                var FirstArrive = person.First().Time;
-                var Arrive = person.First().Time;
-                var Out = person.First().Time;
-                var TotalTime = TimeSpan.Zero;
-                var counter = person.Count();
-                var Recoreds = new List<string>();
-                for (int i = 0; i < person.Count(); i++)
-                {
-                    Recoreds.Add(person.ElementAt(i).Time.ToString());
-                    if (i == 0)
-                    {
-                        continue;
-                    }
-                    if (i % 2 == 0)
-                    {
-                        Arrive = person.ElementAt(i).Time;
-                    }
-                    if (i % 2 != 0 && person.ElementAt(i).Time > LawOfTime.MinOfArrive)
-                    {
-                        if (Arrive < LawOfTime.MinOfArrive)
-                        {
-                            Arrive = LawOfTime.MinOfArrive;
-                        }
-                        if (person.ElementAt(i).Time > LawOfTime.MaxOfChckout)
-                        {
-                            Out = LawOfTime.MaxOfChckout;
-                        }
-                        else
-                        {
-                            Out = person.ElementAt(i).Time;
-                        }
-                    }
-                    if (i % 2 != 0 && person.ElementAt(i).Time < LawOfTime.MinOfArrive)
-                    {
-                        Out = Arrive;
-                    }
-                    if (i % 2 != 0)
-                    {
-                        TotalTime += Out - Arrive;
-                    }
-
-                }
-
-                var Status = new List<type>();
-                // check USerInfo Status
-                if (counter % 2 != 0)
-                {
-                    Status.Add(type.error);
-                }
-                else
-                {
-                    if (FirstArrive > LawOfTime.MaxOfArrive)
-                    {
-                        Status.Add(type.delay);
-                    }
-                    if (Out < LawOfTime.MinOfCheckout)
-                    {
-                        Status.Add(type.hourly_leave);
-                    }
-                    else if (TotalTime >= LawOfTime.StandarTime)
-                    {
-                        if (counter > 2)
-                        {
-                            Status.Add(type.hourly_leave);
-                        }
-                        else
-                        {
-                            Status.Add(type.Normal);
-                        }
-                    }
-                    else
-                    {
-                        Status.Add(type.hourly_leave);
-                    }
-                }
-                UserInfo.Id = person.First().Id;
-                UserInfo.Day = ShamsiDayOfWeek.GetDayShamsi(person.Key.Date.DayOfWeek.ToString());
-                UserInfo.Name = person.First().Name;
-                UserInfo.FirstArrive = FirstArrive;
-                UserInfo.LastCheckout = Out;
-                UserInfo.Record.AddRange(Recoreds);
-                UserInfo.row = Row;
-                UserInfo.WorkTime = TotalTime;
-                UserInfo.Status.AddRange(Status);
-                UserInfo.DateTime = person.Key.Date;
-                UserInfos.Add(UserInfo);
-            }
-
-            return View(UserInfos);
-       
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
