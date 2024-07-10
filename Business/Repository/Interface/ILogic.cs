@@ -1,4 +1,5 @@
-﻿using Infrastructure.Models;
+﻿using Infrastructure.DTOs;
+using Infrastructure.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,9 @@ namespace Business.Repository.Interface
         public void CreateFiles(List<UserInfo> users);
         public InputDetail? ValidUser(string lines);
         public (List<InputDetail> UsersDetail, Dictionary<int, string> UsersId, int ErrorLine) UserDetailsOfLines(string[] lines);
+        public List<type> GetStatus(int recordsCount, TimeSpan firstIn, TimeSpan lastOut, TimeSpan workTime);
+        public TimerDto GetTimes(InputDetail User);
+
 
 
     }

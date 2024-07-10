@@ -14,7 +14,7 @@ namespace Infrastructure.Models
         public DateTime DateTime { get; set; }
         public string Day { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
-        public List<type>? Status { get; set; } = new List<type>(); 
+        public List<type> Status { get; set; } = new List<type>(); 
         public TimeSpan WorkTime { get; set; }
         public TimeSpan FirstArrive { get; set; }
         public TimeSpan StartTimer { get; set; } = new TimeSpan(0);

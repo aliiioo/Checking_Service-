@@ -6,6 +6,7 @@ using Infrastructure.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Net.Mime;
 using System.Text;
@@ -112,5 +113,41 @@ namespace Business.Repository.Imp
             return (UserDetail, UserIds, 0);
         }
 
+        public List<type> GetStatus(int recordsCount, TimeSpan firstIn, TimeSpan lastOut, TimeSpan workTime)
+        {
+            var Status = new List<type>();
+            // check USerInfo Status
+            if (recordsCount % 2 != 0)
+            {
+                Status.Add(type.error);
+            }
+            else
+            {
+                if (firstIn > LawOfTime.MaxOfArrive)
+                {
+                    Status.Add(type.delay);
+                }
+                if (lastOut < LawOfTime.MinOfCheckout)
+                {
+                    Status.Add(type.hourly_leave);
+                }
+                else if (workTime >= LawOfTime.StandarTime)
+                {
+                    if (recordsCount > 2)
+                    {
+                        Status.Add(type.hourly_leave);
+                    }
+                    else
+                    {
+                        Status.Add(type.Normal);
+                    }
+                }
+                else
+                {
+                    Status.Add(type.hourly_leave);
+                }
+            }
+            return Status;
+        }
     }
 }
